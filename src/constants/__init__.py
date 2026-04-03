@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 # For MongoDB connection
-DATABASE_NAME = "Olist_database"
+DATABASE_NAME = "olist_database"
 MONGODB_URL_KEY = os.getenv("MONGODB_URL")
 MONGODB_PASSWORD_KEY = os.getenv("MONGODB_PASSWORD")
 MONGODB_USERNAME_KEY = os.getenv("MONGODB_USERNAME")
@@ -34,7 +34,12 @@ REGION_NAME = "us-east-1"
 """
 Data Ingestion related constant start with DATA_INGESTION VAR NAME
 """
-DATA_INGESTION_COLLECTION_NAME: str = "Proj1-Data"
+DATA_INGESTION_COLLECTIONS: dict = {
+    "customers": "customers_data",
+    "orders": "orders_data",
+    "payments": "payments_data",
+    "reviews": "reviews_data"
+}
 DATA_INGESTION_DIR_NAME: str = "data_ingestion"
 DATA_INGESTION_FEATURE_STORE_DIR: str = "feature_store"
 DATA_INGESTION_INGESTED_DIR: str = "ingested"
