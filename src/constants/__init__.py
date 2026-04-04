@@ -16,7 +16,7 @@ ARTIFACT_DIR: str = "artifact"
 
 MODEL_FILE_NAME = "model.pkl"
 
-TARGET_COLUMN = "Response"
+TARGET_COLUMN = "churn_status"
 CURRENT_YEAR = date.today().year
 PREPROCSSING_OBJECT_FILE_NAME = "preprocessing.pkl"
 
@@ -57,6 +57,7 @@ Data Transformation ralated constant start with DATA_TRANSFORMATION VAR NAME
 DATA_TRANSFORMATION_DIR_NAME: str = "data_transformation"
 DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR: str = "transformed"
 DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR: str = "transformed_object"
+REFRENCE_DATE = '2018-8-30'
 
 """
 MODEL TRAINER related constant start with MODEL_TRAINER var name
