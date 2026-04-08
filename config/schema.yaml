@@ -17,45 +17,83 @@ columns:
   review_comment_message: object
   review_creation_date: object
   review_answer_timestamp: object
+  order_item_id: int64
+  product_id: object
+  seller_id: object
+  shipping_limit_date: object
+  price: float64
+  freight_value: float64
   customer_unique_id: object
   customer_zip_code_prefix: int64
   customer_city: object
-  customer_state: object  
-
+  customer_state: object
 
 numerical_columns:
   - payment_sequential
   - payment_installments
   - payment_value
   - review_score
-  - customer_zip_code_prefix
+  - price
+  - freight_value
 
 categorical_columns:
-  - order_id
-  - customer_id
   - order_status
-  - order_purchase_timestamp
-  - order_approved_at
-  - order_delivered_carrier_date
-  - order_delivered_customer_date
-  - order_estimated_delivery_date
   - payment_type
-  - review_id
-  - review_comment_title
-  - review_comment_message
-  - review_creation_date
-  - review_answer_timestamp
-  - customer_unique_id
   - customer_city
   - customer_state
+  - customer_zip_code_prefix
 
-# drop_columns: _id
+drop_columns:
+  - customer_id
+  - review_id
+  - product_id
+  - seller_id
+  - order_item_id
+  - review_comment_title
+  - review_comment_message
+  - order_approved_at
+  - order_delivered_carrier_date
+  - review_creation_date
+  - review_answer_timestamp
+  - shipping_limit_date
+  - order_status
+  - customer_zip_code_prefix
+  - customer_city
+  - customer_state
+  - payment_sequential
+  - payment_type
 
-# for data transformation
-# num_features:
-#   - Age
-#   - Vintage
+
+  # transformed columns 
+transformed_columns:
+  - Recency
+  - Frequency
+  - Total_Price
+  - Total_Freight
+  - Is_churn
+  - Freight_ratio
+  - Frequency
+
+transfromed_drop_columns:
+  - Recency
+  - Total_Price
+  - Total_Freight
+  - customer_unique_id
 
 
-# mm_columns:
-#   - Annual_Premium
+transformed_numeric_columns:
+  - Monetary
+  - Average_review_score 
+  - total_installments
+  - Freight_ratio
+
+target_column: Is_churn
+
+std_scaler_columns:
+  - Monetary
+  - Average_review_score 
+  - total_installments
+  - Freight_ratio
+  
+minmax_scaler_columns:
+  - Frequency

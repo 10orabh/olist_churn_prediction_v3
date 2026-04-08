@@ -170,3 +170,33 @@ class DataValidation:
         
 
 
+if __name__ == "__main__":
+    try:
+        logging.info("🚀 Starting Data Validation Pipeline via DVC/Terminal...")
+        
+  
+        data_ingestion_artifact = DataIngestionArtifact()
+        validation_config = DataValidationConfig()
+        
+        # 3. Object banaiye aur run kijiye
+        data_validation = DataValidation(
+            data_validation_config=validation_config,
+            data_ingestion_artifact=DataIngestionArtifact()
+        )
+        
+        # 4. Main method trigger kijiye
+        validation_artifact = data_validation.initiate_data_validation()
+        
+        # Check if validation passed or failed
+        if validation_artifact.validation_status:
+            logging.info(f"✅ Data Validation Completed Successfully! Artifacts: {validation_artifact}")
+            print("✅ Data Validation Successful! All columns matched the schema.")
+        else:
+            logging.error(f"❌ Data Validation Failed! Message: {validation_artifact.message}")
+            print(f"❌ Data Validation Failed! Check the report at {validation_artifact.validation_report_file_path}")
+            sys.exit(1) # Validation fail hone par DVC yahin ruk jayega
+            
+    except Exception as e:
+        logging.error(f"❌ Pipeline crashed at Data Validation stage: {e}")
+        print(f"❌ Error: {e}")
+        sys.exit(1)

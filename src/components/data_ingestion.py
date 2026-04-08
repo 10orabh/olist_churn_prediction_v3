@@ -43,6 +43,7 @@ class DataIngestion:
             # merge files on the basis of order_id
             df = pd.merge(dfs["orders"],dfs["payments"], on="order_id", how="left")
             df = pd.merge(df,dfs["reviews"], on="order_id", how="left")
+            df = pd.merge(df,dfs['order_items'], on= "order_id", how='inner')
             
             #merge files on the basis of customer_id 
             df = pd.merge(df,dfs["customers"], on="customer_id", how="left") 
@@ -77,8 +78,11 @@ class DataIngestion:
         logging.info("Entered split_data_as_train_test method of Data_Ingestion class")
 
         try:
-            train_set, test_set = train_test_split(df, test_size=self.data_ingestion_config.train_test_split_ratio, random_state=42)
+            unique_customers = df['customer_unique_id'].unique()
+            train_ids, test_ids = train_test_split(unique_customers, test_size=self.data_ingestion_config.train_test_split_ratio, random_state=42)
 
+            train_df = df[df['customer_unique_id'].isin(train_ids)]
+            test_df = df[df['customer_unique_id'].isin(test_ids)]
             logging.info("Performed train test split on the dataframe")
 
             logging.info(
@@ -90,8 +94,8 @@ class DataIngestion:
             
             logging.info(f"Exporting train and test file path.")
             
-            train_set.to_csv(self.data_ingestion_config.training_file_path, index=False, header=True)
-            test_set.to_csv(self.data_ingestion_config.testing_file_path, index=False, header=True)
+            train_df.to_csv(self.data_ingestion_config.training_file_path, index=False, header=True)
+            test_df.to_csv(self.data_ingestion_config.testing_file_path, index=False, header=True)
 
             logging.info(f"Exported train and test file path.")
         
@@ -131,4 +135,22 @@ class DataIngestion:
 
         except Exception as e:
             raise MyException(e, sys) #type: ignore    
+
+if __name__ == "__main__":
+    try:
+        logging.info("🚀 Starting Data Ingestion Pipeline via DVC/Terminal...")
+        
+        # 1. Object banaiye
+        data_ingestion = DataIngestion()
+        
+        # 2. Main method ko trigger kijiye
+        ingestion_artifact = data_ingestion.initiate_data_ingestion()
+        
+        logging.info(f"✅ Data Ingestion Completed!")
     
+        
+    except Exception as e:
+        logging.error(f"❌ Pipeline failed at Data Ingestion stage: {e}")
+        print(f"❌ Error: {e}")
+        # DVC ko batana zaroori hai ki step fail ho gaya hai taaki wo aage na badhe
+        sys.exit(1)
